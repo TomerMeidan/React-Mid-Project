@@ -1,12 +1,15 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { getAllUsers ,deleteUserByID} from "./utils";
+import { getObjects, deleteObjectByID, updateObjectByID } from "./utils";
 import User from "./User";
+
+const USERS_URL = "https://jsonplaceholder.typicode.com/users";
 
 function App() {
   const [users, setUsers] = useState([]);
   const [displayUsersBySearch, setDisplayUsersBySearch] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [response, setResponse] = useState("");
 
   // Initialize the users list once page is rendered
   useEffect(() => {
@@ -25,22 +28,38 @@ function App() {
   }, [searchInput, users]);
 
   // Name - Handle Users
-  // Input - None
+  // Input - String URL
   // Info - Getting all the users from the database
   const handleUsers = async () => {
-    const { data: users } = await getAllUsers();
+    const { data: users } = await getObjects(USERS_URL).catch((err) =>
+      setResponse(`Failed to pull users from database - ${err.name}`)
+    );
     setUsers(users);
   };
 
   // Name - Handle User Delete
-  // Input - ObjectID id
-  // Info - Deleting a user by his id from the database
+  // Input - ObjectID id, String URL
+  // Info - Deleting a user by the id field from the database
   const handleUserDelete = async (id) => {
-    await deleteUserByID(id); 
+    await deleteObjectByID(USERS_URL, id)
+      .then(() => setResponse(`User id ${id} was deleted from the database!`))
+      .catch((err) =>
+        setResponse(`Failed to delete user id ${id} - ${err.name}`)
+      );
     setUsers(users.filter((user) => user.id != id)); // Simulating the user deletion from database
   };
 
-  const handleUserUpdate = () => {};
+  // Name - Handle User Update
+  // Input - ObjectID id, String URL, Object Data
+  // Info - Updating a user by the id field
+  const handleUserUpdate = async (id, updatedUser) => {
+    // Simulating updating the user in the database
+    await updateObjectByID(USERS_URL, id, updatedUser)
+      .then(() => setResponse(`Updated User id ${id} in the database!`))
+      .catch((err) =>
+        setResponse(`Failed to update user id ${id} - ${err.name}`)
+      );
+  };
 
   return (
     <div
@@ -48,10 +67,14 @@ function App() {
         border: 1,
         borderStyle: "solid",
         borderRadius: "50px",
-        padding: "15px",
+        padding: "15px", position:"relative"
       }}
     >
-      Search: <input type="" onChange={(e) => setSearchInput(e.target.value)} />{" "}
+      <p style={{ color: "red" }}>{response}</p>
+      Search: <input
+        type=""
+        onChange={(e) => setSearchInput(e.target.value)}
+      />{" "}
       <button style={{ marginLeft: "30px" }}>Add</button>
       <br />
       <br />
@@ -59,8 +82,9 @@ function App() {
         ? null
         : displayUsersBySearch.map((user) => {
             return (
-              <div key={user.id} style={{ padding: "5px" }}>
+              <div key={user.id} style={{ padding: "5px"}}>
                 <User
+                  onUpdateClick={handleUserUpdate}
                   onDeleteClick={handleUserDelete}
                   userData={JSON.stringify(user)}
                 />
