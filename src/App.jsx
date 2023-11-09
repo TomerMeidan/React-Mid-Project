@@ -62,27 +62,15 @@ function App() {
   };
 
   return (
-    <div
-      style={{
-        border: 1,
-        borderStyle: "solid",
-        borderRadius: "50px",
-        padding: "15px", position:"relative"
-      }}
-    >
+    <div className="main-box">
       <p style={{ color: "red" }}>{response}</p>
-      Search: <input
-        type=""
-        onChange={(e) => setSearchInput(e.target.value)}
-      />{" "}
+      Search: <input onChange={(e) => setSearchInput(e.target.value)} />
       <button style={{ marginLeft: "30px" }}>Add</button>
-      <br />
-      <br />
       {displayUsersBySearch.length < 1
         ? null
         : displayUsersBySearch.map((user) => {
             return (
-              <div key={user.id} style={{ padding: "5px"}}>
+              <div key={user.id}>
                 <User
                   onUpdateClick={handleUserUpdate}
                   onDeleteClick={handleUserDelete}

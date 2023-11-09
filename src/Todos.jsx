@@ -7,13 +7,23 @@ const Todos = ({ userTodoList }) => {
     setUserTodos(userTodoList), [userTodoList];
   });
   return (
-    <div style={{padding:"5px" ,border: 1, borderStyle: "solid" }}>
+    <div>
       {userTodos.length > 0
         ? userTodos.map((todo) => {
-            return <div key={todo.id} >
-                Title: {todo.title}<br/>
-                Completed: {todo.completed? "true" : "false"}
-                </div>;
+            return (
+              <div className="todos-box" key={todo.id}>
+                <p>
+                  <b>Title:</b> {todo.title}
+                </p>
+
+                <div className="completed-box">
+                  <p>
+                    <b>Completed:</b> {todo.completed ? "true" : "false"}
+                  </p>
+                  <button style={{marginLeft: 40}}>Complete Task</button>
+                </div>
+              </div>
+            );
           })
         : null}
     </div>

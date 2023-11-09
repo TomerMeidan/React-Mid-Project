@@ -43,73 +43,64 @@ const User = ({ userData, onDeleteClick, onUpdateClick }) => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
-      <div style={{ display: "inline" }}>
+    <div className="parentBox">
+      <div
+        className="user-box"
+        style={{
+          backgroundColor: clickID ? "darkgoldenrod" : "#242424",
+          borderColor: border,
+        }}
+      >
         <div
-          style={{
-            border: 1,
-            borderStyle: "solid",
-            borderColor: border,
-            padding: "15px",
-            backgroundColor: clickID ? "darkgoldenrod" : "#242424",
-          }}
+          onClick={() => setClickID(!clickID)}
+          style={{ display: "flex", justifyContent: "space-between" }}>
+          ID:{" " + user.id}
+        </div>
+        <div className="input-bar">
+          Name:
+          <input
+            onChange={(e) =>
+              setUser((user) => ({ ...user, name: e.target.value }))
+            }
+            type="text"
+            defaultValue={user.name}
+          />
+        </div>
+        <div className="input-bar">
+          Email:
+          <input
+            onChange={(e) =>
+              setUser((user) => ({ ...user, name: e.target.value }))
+            }
+            type="text"
+            defaultValue={user.email}
+          />
+        </div>
+        <button
+          onMouseEnter={() => setMousedOverOtherData(true)}
+          onClick={() => setMousedOverOtherData(false)}
         >
-          <div
-            onClick={() => setClickID(!clickID)}
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            ID:{" " + user.id}
-          </div>
-          <br />
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            Name:
-            <input
-              onChange={(e) =>
-                setUser((user) => ({ ...user, name: e.target.value }))
-              }
-              type="text"
-              defaultValue={user.name}
-            />
-          </div>
-          <br />
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            Email:
-            <input
-              onChange={(e) =>
-                setUser((user) => ({ ...user, name: e.target.value }))
-              }
-              type="text"
-              defaultValue={user.email}
-            />
-          </div>
-          <br />
-          <button
-            onMouseEnter={() => setMousedOverOtherData(true)}
-            onClick={() => setMousedOverOtherData(false)}
-          >
-            Other Data
-          </button>
-          {mousedOverOtherData ? (
-            <UserOtherData
-              onUserUpdate={handleUserUpdate}
-              userData={JSON.stringify(user)}
-            />
-          ) : null}
-          <button onClick={() => onUpdateClick(user.id, user)}>Update</button>
-          <button onClick={() => onDeleteClick(user.id)}>Delete</button>
-        </div>
-        <div>
-          <p></p>
-        </div>
+          Other Data
+        </button>
+        <button onClick={() => onUpdateClick(user.id, user)}>Update</button>
+        <button onClick={() => onDeleteClick(user.id)}>Delete</button>
+        {mousedOverOtherData ? (
+          <UserOtherData
+            onUserUpdate={handleUserUpdate}
+            userData={JSON.stringify(user)}
+          />
+        ) : null}
+        
       </div>
-      <div style={{ display: "inline-block" }}>
+
+
+      <div className="todos-posts-box">
         {clickID ? (
-          <div style={{ paddingLeft: "10px" }}>
-            <p style={{ textAlign: "center" }}>
-              Todo List of user id {user.id}
-            </p>
-            <Todos userTodoList={todos} /> <Posts />{" "}
-          </div>
+          <>
+            Todo List of user id {user.id}
+            <Todos userTodoList={todos} /> 
+            {/* <Posts />{" "} */}
+          </>
         ) : null}
       </div>
     </div>

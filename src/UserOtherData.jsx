@@ -16,19 +16,46 @@ const UserOtherData = ({ userData, onUserUpdate }) => {
         borderRadius: "25px",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className="input-bar">
         Street:
-        <input type="text" onChange={(e) => setUser({...user, address: {...user.address, street: e.target.value}})} defaultValue={user.address.street} />
+        <input
+          type="text"
+          onChange={(e) =>
+            setUser({
+              ...user,
+              address: { ...user.address, street: e.target.value },
+            })
+          }
+          defaultValue={user.address.street}
+        />
       </div>
       <br />
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className="input-bar">
         City:
-        <input type="text" onChange={(e) => setUser({...user, address: {...user.address, city: e.target.value}})} defaultValue={user.address.city} />
+        <input
+          type="text"
+          onChange={(e) =>
+            setUser({
+              ...user,
+              address: { ...user.address, city: e.target.value },
+            })
+          }
+          defaultValue={user.address.city}
+        />
       </div>
       <br />
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className="input-bar">
         Zipcode:
-        <input type="text" onChange={(e) => setUser({...user, address: {...user.address, zipcode: e.target.value}})} defaultValue={user.address.zipcode} />
+        <input
+          type="text"
+          onChange={(e) =>
+            setUser({
+              ...user,
+              address: { ...user.address, zipcode: e.target.value },
+            })
+          }
+          defaultValue={user.address.zipcode}
+        />
       </div>
     </div>
   );
