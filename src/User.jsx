@@ -4,13 +4,12 @@ import UserOtherData from "./UserOtherData";
 import Posts from "./Posts";
 import Todos from "./Todos";
 
-const POSTS_URL = "https://jsonplaceholder.typicode.com/posts";
 const TODOS_URL = "https://jsonplaceholder.typicode.com/todos";
 
 const User = ({ userData, onDeleteClick, onUpdateClick }) => {
   const [user, setUser] = useState(JSON.parse(userData));
   const [border, setBorder] = useState("white"); // white - has no tasks, red - tasks not completed, otherwise its green
-  const [todos, userTodoList] = useState([]);
+  const [todos, setUserTodoList] = useState([]);
   const [mousedOverOtherData, setMousedOverOtherData] = useState(false);
   const [clickID, setClickID] = useState(false);
 
@@ -29,8 +28,8 @@ const User = ({ userData, onDeleteClick, onUpdateClick }) => {
   }, [todos]);
 
   const buildUserTodos = async () => {
-    const { data: userTodos } = await getObjectByID(TODOS_URL, user.id, 2);
-    userTodoList(userTodos);
+    const { data: userTodos } = await getObjectByID(TODOS_URL, user.id, 5);
+    setUserTodoList(userTodos);
   };
 
   const checkUserTodos = async () => {
@@ -42,64 +41,73 @@ const User = ({ userData, onDeleteClick, onUpdateClick }) => {
     setUser(updatedUser);
   };
 
+  const handleUserTodosUpdate = (todosUpdate) => {
+    setUserTodoList(todosUpdate);
+  };
+
   return (
     <div className="parentBox">
-      <div
-        className="user-box"
-        style={{
-          backgroundColor: clickID ? "darkgoldenrod" : "#242424",
-          borderColor: border,
-        }}
-      >
+      <div style={{ display: "inline" }}>
         <div
-          onClick={() => setClickID(!clickID)}
-          style={{ display: "flex", justifyContent: "space-between" }}>
-          ID:{" " + user.id}
-        </div>
-        <div className="input-bar">
-          Name:
-          <input
-            onChange={(e) =>
-              setUser((user) => ({ ...user, name: e.target.value }))
-            }
-            type="text"
-            defaultValue={user.name}
-          />
-        </div>
-        <div className="input-bar">
-          Email:
-          <input
-            onChange={(e) =>
-              setUser((user) => ({ ...user, name: e.target.value }))
-            }
-            type="text"
-            defaultValue={user.email}
-          />
-        </div>
-        <button
-          onMouseEnter={() => setMousedOverOtherData(true)}
-          onClick={() => setMousedOverOtherData(false)}
+          className="user-box"
+          style={{
+            backgroundColor: clickID ? "darkgoldenrod" : "#242424",
+            borderColor: border,
+          }}
         >
-          Other Data
-        </button>
-        <button onClick={() => onUpdateClick(user.id, user)}>Update</button>
-        <button onClick={() => onDeleteClick(user.id)}>Delete</button>
-        {mousedOverOtherData ? (
-          <UserOtherData
-            onUserUpdate={handleUserUpdate}
-            userData={JSON.stringify(user)}
-          />
-        ) : null}
-        
+          <div
+            onClick={() => setClickID(!clickID)}
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            ID:{" " + user.id}
+          </div>
+          <div className="input-bar">
+            Name:
+            <input
+              onChange={(e) =>
+                setUser((user) => ({ ...user, name: e.target.value }))
+              }
+              type="text"
+              defaultValue={user.name}
+            />
+          </div>
+          <div className="input-bar">
+            Email:
+            <input
+              onChange={(e) =>
+                setUser((user) => ({ ...user, name: e.target.value }))
+              }
+              type="text"
+              defaultValue={user.email}
+            />
+          </div>
+          <div className="buttons-group">
+            <button
+              onMouseEnter={() => setMousedOverOtherData(true)}
+              onClick={() => setMousedOverOtherData(false)}
+            >
+              Other Data
+            </button>
+            <button onClick={() => onUpdateClick(user.id, user)}>Update</button>
+            <button onClick={() => onDeleteClick(user.id)}>Delete</button>
+          </div>
+          {mousedOverOtherData ? (
+            <UserOtherData
+              onUserUpdate={handleUserUpdate}
+              userData={JSON.stringify(user)}
+            />
+          ) : null}
+        </div>
       </div>
-
-
       <div className="todos-posts-box">
         {clickID ? (
           <>
-            Todo List of user id {user.id}
-            <Todos userTodoList={todos} /> 
-            {/* <Posts />{" "} */}
+            <Todos
+              userID={user.id}
+              userTodoList={todos}
+              onCompleteClick={handleUserTodosUpdate}
+            />
+            <Posts userID={user.id} />
           </>
         ) : null}
       </div>

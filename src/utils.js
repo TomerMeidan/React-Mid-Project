@@ -3,7 +3,7 @@ import axios from "axios";
 // Get all objects
 const getObjects = (url) => axios.get(url);
 
-// Get an object by the id nad url api call
+// Get an object by the id and url api call
 const getObjectByID = (url, id, limit = -1) =>
   limit === -1
     ? axios.get(`${url}?userId=${id}`)

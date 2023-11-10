@@ -2,6 +2,8 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { getObjects, deleteObjectByID, updateObjectByID } from "./utils";
 import User from "./User";
+import Todos from "./Todos";
+import Posts from "./Posts";
 
 const USERS_URL = "https://jsonplaceholder.typicode.com/users";
 
@@ -62,23 +64,25 @@ function App() {
   };
 
   return (
-    <div className="main-box">
-      <p style={{ color: "red" }}>{response}</p>
-      Search: <input onChange={(e) => setSearchInput(e.target.value)} />
-      <button style={{ marginLeft: "30px" }}>Add</button>
-      {displayUsersBySearch.length < 1
-        ? null
-        : displayUsersBySearch.map((user) => {
-            return (
-              <div key={user.id}>
-                <User
-                  onUpdateClick={handleUserUpdate}
-                  onDeleteClick={handleUserDelete}
-                  userData={JSON.stringify(user)}
-                />
-              </div>
-            );
-          })}
+    <div className="overall-box">
+      <div className="main-box">
+        <p style={{ color: "red" }}>{response}</p>
+        Search: <input onChange={(e) => setSearchInput(e.target.value)} />
+        <button style={{ marginLeft: "30px" }}>Add</button>
+        {displayUsersBySearch.length < 1
+          ? null
+          : displayUsersBySearch.map((user) => {
+              return (
+                <div key={user.id}>
+                  <User
+                    onUpdateClick={handleUserUpdate}
+                    onDeleteClick={handleUserDelete}
+                    userData={JSON.stringify(user)}
+                  />
+                </div>
+              );
+            })}
+      </div>
     </div>
   );
 }
